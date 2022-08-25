@@ -1,0 +1,55 @@
+version: "3"
+
+networks:
+  picasso_net:
+    external: true
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    environment:
+      TZ: Europe/London
+      WEBPASSWORD:
+      ServerIP: 192.168.50.253
+    hostname: picasso.pihole
+    volumes:
+      - /picasso/.AppData/pihole:/etc/pihole/
+      - /picasso/.AppData/pihole/dnsmasq:/etc/dnsmasq.d/
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    networks:
+      picasso_net:
+        ipv4_address: 192.168.50.253
+
+  unbound:
+    container_name: unbound
+    image: mvance/unbound:latest
+    volumes:
+      - /picasso/.AppData/unbound:/opt/unbound/etc/unbound/
+    ports:
+      - 5335:53/upd
+      - 5335:53/tcp
+    restart: always
+
+  cloudflare-ddns:
+    container_name: cloudflareDNS
+    image: oznu/cloudflare-ddns
+    restart: always
+    environment:
+      PUID: 0
+      PGID: 0
+      API_KEY: ktez6xlMnDf0yaD5xGuUjgI-PV95A2Dn3tohz6wV
+      ZONE: cityplug.co.uk
+      SUBDOMAIN: home.astarpainters.co.uk
+
+  homer:
+    container_name: homer
+    image: b4bz/homer:latest
+    hostname: homer  
+    volumes:
+      - /picasso/.AppData/homer/assets:/www/assets
+    ports:
+      - 85:8080
+    restart: always
