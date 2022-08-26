@@ -1,5 +1,5 @@
 ---
-title: "Draco Dashboard"
+title: "Picasso Dashboard"
 subtitle: "Home"
 
 header: false
@@ -48,42 +48,17 @@ links:
    target: "_blank" # optional html a tag target attribute
 
 services:
-  - name: "//Hardware"
-    icon: "fa-solid fa-server"
-    items:
-#      - name: "Home Assistant "
-#        logo: "assets/tools/ha.png"
-#        subtitle: "Automation Panel"
-#        tag: "core"
-#        tagstyle: "is-link"
-#        url: "http://192.168.50.15:8123"
-#        target: "_blank" # optional html a tag target attribute
-      - name: "Wireguard"
-        logo: "assets/tools/wireguard.png"
-        subtitle: "VPN Server"
-        tag: "app"
-        tagstyle: "is-link"
-        url: "http://192.168.50.250:24792/"
-        target: "_blank" # optional html a tag target attribute
-      - name: "PVE"
-        logo: "assets/tools/pve.png"
-        subtitle: "Proxmox VE"
-        tag: "core"
-        tagstyle: "is-link"
-        url: "https://192.168.50.11:8006"
-        target: "_blank" # optional html a tag target attribute
-
   - name: "//Services"
     icon: "fa-solid fa-gears"
     items:
-      - name: "Cockpit"
-        logo: "assets/tools/cockpit.png"
+      - name: "Shell"
+        logo: "assets/tools/shell.png"
         subtitle: "Server Management GUI"
         tag: "service"
         tagstyle: "is-success"
         url: "https://192.168.50.250:9090/"
         target: "_blank" # optional html a tag target attribute
-      - name: "Draco.Pihole"
+      - name: "Picasso.Pihole"
         logo: "assets/tools/pihole.png"
         subtitle: "DNS"
         tag: "service"
@@ -94,42 +69,10 @@ services:
   - name: "//Management"
     icon: "fa-solid fa-folder-open"
     items:
-      - name: "Portainer"
-        logo: "assets/tools/portainer.png"
+      - name: "Reolink"
+        logo: "assets/tools/reo.png"
         subtitle: "Docker UI"
         tag: "core"
         tagstyle: "is-link"
         url: "http://192.168.50.250:9000/#!/auth"
         target: "_blank" # optional html a tag target attribute
-      - name: "Unifi Cloud"
-        logo: "assets/tools/controller.png"
-        subtitle: "Ubiquiti Remote"
-        tag: "core"
-        tagstyle: "is-link"
-        url: "https://unifi.cityplug.co.uk:8443"
-        target: "_blank" # optional html a tag target attribute
-      - name: "npm Cloud"
-        logo: "assets/tools/npm.png"
-        subtitle: "Proxy Manager"
-        tag: "core"
-        tagstyle: "is-link"
-        url: "http://192.168.50.7:81"
-        target: "_blank" # optional html a tag target attribute
-
-  - name: "//Estate"
-    icon: "fa-solid fa-house-lock"
-    items:
-      - name: "Relay"
-        logo: "assets/tools/ghost.png"
-        subtitle: ""
-        tag: "bridge"
-        tagstyle: "is-link"
-        url: "#relay"
-#        target: "_blank" # optional html a tag target attribute
-      - name: "Pixle"
-        logo: "assets/tools/ghost.png"
-        subtitle: ""
-        tag: "bridge"
-        tagstyle: "is-link"
-        url: "#pixle"
-#        target: "_blank" # optional html a tag target attribute
