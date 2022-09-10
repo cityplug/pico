@@ -11,7 +11,7 @@ services:
     environment:
       TZ: Europe/London
       WEBPASSWORD:
-      ServerIP: 192.168.50.253
+      ServerIP: 192.168.7.253
     hostname: picasso.pihole
     volumes:
       - /picasso/.AppData/pihole:/etc/pihole/
@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     networks:
       picasso_net:
-        ipv4_address: 192.168.50.253
+        ipv4_address: 192.168.7.253
 
   unbound:
     container_name: unbound
@@ -67,3 +67,14 @@ services:
       - HOMEBRIDGE_CONFIG_UI_PORT=7471
     volumes:
       - /picasso/.AppData/homebridge:/homebridge
+      
+  watchtower:
+      image: containrrr/watchtower
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      environment: 
+        - WATCHTOWER_CLEANUP=true
+        - WATCHTOWER_LABEL_ENABLE=true
+        - WATCHTOWER_INCLUDE_STOPPED=true
+        - WATCHTOWER_REVIVE_STOPPED=true
+        - WATCHTOWER_POLL_INTERVAL=604800

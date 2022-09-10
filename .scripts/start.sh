@@ -22,7 +22,7 @@ systemd-fsck-root.service systemd-logind.service \
 bluetooth.service apt-daily.service apt-daily.timer apt-daily-upgrade.timer apt-daily-upgrade.service
 
 # --- Over clcok raspberry pi & increase GPU
-sed -i '40i\over_voltage=4\ncore_freq=500\narm_freq=1350\n' /boot/config.txt
+sed -i '40i\over_voltage=2\narm_freq_min=900\narm_freq=1500\n' /boot/config.txt
 
 # --- Disable Bluetooth
 echo "
@@ -45,7 +45,6 @@ echo "#  ---  Installing New Packages  ---  #"
 apt install ca-certificates -y
 apt install lsb-release -y
 apt install fail2ban -y
-apt install samba samba-common-bin -y
 apt install shellinabox -y
 # --- Install Docker & Docker-Compose
 mkdir -p /etc/apt/keyrings
@@ -69,7 +68,6 @@ usermod -aG docker shay
 echo "#  ---  Running Addons  ---  #"
 mkdir -p /picasso
 mkdir /picasso/.AppData/ && chmod -R 777 /picasso/.AppData
-mkdir /picasso/public && chmod -R 777 /picasso/public
 chown -R shay:sambashare /picasso/*
 
 rm -rf /etc/update-motd.d/* && rm -rf /etc/motd
