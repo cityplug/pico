@@ -18,7 +18,7 @@ SHELLINABOX_PORT=6105
 SHELLINABOX_ARGS="--no-beep"
 
 # specify the IP address of a destination SSH server
-SHELLINABOX_ARGS="--o-beep -s /:SSH:192.168.50.0/24"
+# SHELLINABOX_ARGS="--o-beep -s /:SSH:192.168.50.0/24"
 
 # Fancy configuration with right-click menu choice for black-on-white
 SHELLINABOX_ARGS="--no-beep --css /etc/shellinabox/white-on-black.css"

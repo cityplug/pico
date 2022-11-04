@@ -1,7 +1,7 @@
 version: "3"
 
 networks:
-  picasso_net:
+  pico_net:
     external: true
 
 services:
@@ -12,22 +12,22 @@ services:
       TZ: Europe/London
       WEBPASSWORD:
       ServerIP: 192.168.7.253
-    hostname: picasso.pihole
+    hostname: pico.pihole
     volumes:
-      - /picasso/.AppData/pihole:/etc/pihole/
-      - /picasso/.AppData/pihole/dnsmasq:/etc/dnsmasq.d/
+      - /pico/.AppData/pihole:/etc/pihole/
+      - /pico/.AppData/pihole/dnsmasq:/etc/dnsmasq.d/
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
     networks:
-      picasso_net:
+      pico_net:
         ipv4_address: 192.168.7.253
 
   unbound:
     container_name: unbound
     image: mvance/unbound:latest
     volumes:
-      - /picasso/.AppData/unbound:/opt/unbound/etc/unbound/
+      - /pico/.AppData/unbound:/opt/unbound/etc/unbound/
     ports:
       - 5335:53/upd
       - 5335:53/tcp
@@ -49,10 +49,34 @@ services:
     image: b4bz/homer:latest
     hostname: homer  
     volumes:
-      - /picasso/.AppData/homer/assets:/www/assets
+      - /pico/.AppData/homer/assets:/www/assets
     ports:
       - 85:8080
     restart: always
+
+  zerotier:
+    container_name: zerotier
+    image: zyclonite/zerotier:latest
+    devices:
+      - /dev/net/run
+    network_mode: host
+    volumes:
+      - /pico/.AppData/zerotier:/var/lib/zerotier-one
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+
+  filebrowser:
+    container_name: filebrowser
+    image: filebrowser/filebrowser:latest
+    user: 0:0
+    volume: 
+      - /pico/:/srv
+    ports:
+      - 8222:80
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
 
   homebridge:
     image: oznu/homebridge:latest
@@ -66,7 +90,7 @@ services:
       - HOMEBRIDGE_CONFIG_UI=1
       - HOMEBRIDGE_CONFIG_UI_PORT=7471
     volumes:
-      - /picasso/.AppData/homebridge:/homebridge
+      - /pico/.AppData/homebridge:/homebridge
       
   watchtower:
       image: containrrr/watchtower

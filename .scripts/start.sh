@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Raspbian (picasso.pallet v2.2) setup script.
+# Raspbian (pico.pallet v2.2) setup script.
 
 # --- Remove Bloatware
 echo "#  ---  Removing Bloatware  ---  #"
@@ -22,7 +22,7 @@ systemd-fsck-root.service systemd-logind.service \
 bluetooth.service apt-daily.service apt-daily.timer apt-daily-upgrade.timer apt-daily-upgrade.service
 
 # --- Over clcok raspberry pi & increase GPU
-sed -i '40i\over_voltage=2\narm_freq_min=900\narm_freq=1500\n' /boot/config.txt
+# sed -i '40i\over_voltage=2\narm_freq_min=900\narm_freq=1500\n' /boot/config.txt
 
 # --- Disable Bluetooth
 echo "
@@ -34,17 +34,16 @@ echo "#  ---  Change root password  ---  #"
 passwd root
 echo "#  ---  Root password changed  ---  #"
 
-# --- Initialzing picasso
-hostnamectl set-hostname picasso.home.lan
-hostnamectl set-hostname "Picasso Pallet" --pretty
+# --- Initialzing pico
+hostnamectl set-hostname pico.home.lan
+hostnamectl set-hostname "Pico Pallet" --pretty
 rm -rf /etc/hosts
-mv /opt/picasso/.scripts/hosts /etc/hosts
+mv /opt/pico/.scripts/hosts /etc/hosts
 
 # --- Install Packages
 echo "#  ---  Installing New Packages  ---  #"
-apt install ca-certificates -y
-apt install lsb-release -y
 apt install fail2ban -y
+apt install samba samba-common-bin -y
 apt install shellinabox -y
 # --- Install Docker & Docker-Compose
 mkdir -p /etc/apt/keyrings
@@ -56,7 +55,7 @@ echo \
 
 apt update && apt install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
 
-curl -L "https://github.com/docker/compose/releases/download/$(curl https://github.com/docker/compose/releases | grep -m1 '<a href="/docker/compose/releases/download/' | grep -o 'v[0-9:].[0-9].[0-9]')/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+wget https://github.com/docker/compose/releases/download/v2.11.2/docker-compose-linux-aarch64 -O /usr/local/bin/docker-compose
 
 chmod +x /usr/local/bin/docker-compose && apt install docker-compose -y
 
@@ -66,25 +65,30 @@ usermod -aG docker shay
 
 # --- Addons
 echo "#  ---  Running Addons  ---  #"
-mkdir -p /picasso
-mkdir /picasso/.AppData/ && chmod -R 777 /picasso/.AppData
-chown -R shay:sambashare /picasso/*
+mkdir -p /pico
+mkdir /pico/.AppData/ && chmod -R 777 /pico/.AppData
+mkdir /pico/store/ && chmod -R 777 /pico/store
+mkdir /pico/public && chmod -R 777 /pico/public
+chown -R shay:sambashare /pico/*
 
 rm -rf /etc/update-motd.d/* && rm -rf /etc/motd
-mv /opt/picasso/10-uname /etc/update-motd.d/ && chmod +x /etc/update-motd.d/10-uname
+mv /opt/pico/10-uname /etc/update-motd.d/ && chmod +x /etc/update-motd.d/10-uname
 
 wget https://raw.githubusercontent.com/shellinabox/shellinabox/master/shellinabox/white-on-black.css -O /etc/shellinabox/white-on-black.css
-mv /opt/picasso/.scripts/shellinabox /etc/default/shellinabox
+mv /opt/pico/.scripts/shellinabox /etc/default/shellinabox
+
+# --- Security Addons
+groupadd ssh-users
+usermod -aG ssh-users shay
+sed -i '15i\AllowGroups ssh-users\n' /etc/ssh/sshd_config
 
 # --- Create and allocate swap
 echo "#  ---  Creating 2GB swap file  ---  #"
 fallocate -l 2G /swapfile
-# --- Sets permissions on swap
 chmod 600 /swapfile
 mkswap /swapfile && swapon /swapfile
 # --- Add swap to the /fstab file & Verify command
 sh -c 'echo "/swapfile none swap sw 0 0" >> /etc/fstab' && cat /etc/fstab
-# --- Clear older versions
 sh -c 'echo "apt autoremove -y" >> /etc/cron.monthly/autoremove'
 # --- Make file executable
 chmod +x /etc/cron.monthly/autoremove

@@ -1,13 +1,28 @@
 #!/bin/bash
 
-# --- Security Addons
-groupadd ssh-users
-usermod -aG ssh-users shay
-sed -i '15i\AllowGroups ssh-users\n' /etc/ssh/sshd_config
+mv /opt/pico/.scripts/jail.local /etc/fail2ban/jail.local
 
-mv /opt/picasso/.scripts/jail.local /etc/fail2ban/jail.local
+# --- Setup samba share and config
+echo "#  ---  Setting up samba share --- #"
+usermod -aG sambashare shay
+usermod -aG sambashare baari
+chmod -R 777 /pico/*
 
+systemctl stop smbd
+mv /etc/samba/smb.conf /etc/samba/smb.conf.bak
+mv /opt/pico/.scripts/smb.conf /etc/samba/
+
+echo "#  ---  Create samba user password --- #"
+smbpasswd -a shay
+smbpasswd -a baari
+echo
+/etc/init.d/smbd restart && /etc/init.d/nmbd restart
 echo "#  ---  Samba share created --- #"
 
+echo "
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 1" >> /etc/sysctl.conf
+sysctl -p
+
 # ----> Next Script
-./picasso_net.sh
+./pico_net.sh
