@@ -19,12 +19,12 @@
 --------------------------------------------------------------------------------
 ### Run the following scripts
     sudo su
-    cd /opt && apt install git -y && git clone https://github.com/cityplug/relay && chmod +x relay/.scripts/*
+    cd /opt && apt install git -y && git clone https://github.com/cityplug/pico && chmod +x pico/.scripts/*
 ------------------------------------------------------------------------------
 ### Run the following scripts
-    cd relay/.scripts/ && ./start.sh
+    cd pico/.scripts/ && ./start.sh
     sudo su
-    cd /opt/relay/.scripts/ && ./security-samba.sh
+    cd /opt/pico/.scripts/ && ./security-samba.sh
 --------------------------------------------------------------------------------
     docker exec zerotier-one zerotier-cli join
 --------------------------------------------------------------------------------
