@@ -23,16 +23,6 @@ services:
       pico_net:
         ipv4_address: 192.168.7.253
 
-  unbound:
-    container_name: unbound
-    image: mvance/unbound:latest
-    volumes:
-      - /pico/.AppData/unbound:/opt/unbound/etc/unbound/
-    ports:
-      - 5335:53/upd
-      - 5335:53/tcp
-    restart: always
-
   cloudflare-ddns:
     container_name: cloudflareDNS
     image: oznu/cloudflare-ddns
@@ -85,8 +75,8 @@ services:
     network_mode: host
     environment:
       - TZ=Europe/London
-      - PGID=1000
-      - PUID=1000
+      - PGID=0
+      - PUID=0
       - HOMEBRIDGE_CONFIG_UI=1
       - HOMEBRIDGE_CONFIG_UI_PORT=7471
     volumes:

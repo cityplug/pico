@@ -21,9 +21,6 @@ systemd-udev-trigger.service systemd-journald.service \
 systemd-fsck-root.service systemd-logind.service \
 bluetooth.service apt-daily.service apt-daily.timer apt-daily-upgrade.timer apt-daily-upgrade.service
 
-# --- Over clcok raspberry pi & increase GPU
-# sed -i '40i\over_voltage=2\narm_freq_min=900\narm_freq=1500\n' /boot/config.txt
-
 # --- Disable Bluetooth
 echo "
 disable_splash=1
